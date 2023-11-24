@@ -1,7 +1,7 @@
 console.log("Hello World!");
 
 // function expression that computes a randomly chosen option of rock, paper or scissors
-let compChoice = function() {
+let getCompChoice = function() {
     let choiceStr;
     let choiceNum = Math.floor(Math.random() * 3) + 1;
     console.log(choiceNum);
@@ -25,13 +25,13 @@ let compChoice = function() {
 
 
 // function that plays one round of the game
-function playGame(userChoice, compChoice) {
+function playRound(userChoice, compChoice) {
     let userChoiceCase = userChoice.toLowerCase();
     let compChoiceCase = compChoice.toLowerCase(); 
 
     let result;
     if (userChoiceCase === compChoiceCase) {
-        console.log(`Tie! You both chose ${userChoice}`);
+        result =`Tie! You both chose ${userChoice}`;
     } else {
         if (userChoiceCase === "rock" && compChoiceCase === "paper") {
             result = `You lose! ${compChoice} beats ${userChoice}`;
@@ -51,6 +51,45 @@ function playGame(userChoice, compChoice) {
     return result;
 }
 
-let playerChoice = "Paper";
+function getPlayerChoice() {
+    let choice = prompt("Enter your choice (rock, paper, scissors): ")
+    
+    return choice;
+}
 
-console.log(playGame(playerChoice, compChoice()));
+
+// function that plays 5 rounds, records the score, then reports the winner/loser depending on score
+function game() {
+    let playerScore = 0;
+    let compScore = 0;
+    let ties = 0;
+    for (let i = 0; i < 5; i++) {
+        let result = playRound(getPlayerChoice(), getCompChoice());
+        if (result.includes('both')) {
+            ties++;
+        } else if (result.includes('lose')) {
+            compScore++;
+        } else {
+            playerScore++;
+        }
+        console.log(result);
+    }
+
+    return displayWinner(playerScore, compScore, ties);
+}
+
+function displayWinner(playerScore, compScore, ties) {
+    let heading = ("Game results: ")
+    let winner;
+    if (playerScore > compScore) {
+        winner = `player wins! ${playerScore} to ${compScore}; there were ${ties} ties`;
+    } else {
+        winner = `computer wins, ${compScore} to ${playerScore}; there were ${ties} ties`;
+    }
+    let finalResult = heading + winner;
+
+    return finalResult;
+}
+
+console.log(game());
+
