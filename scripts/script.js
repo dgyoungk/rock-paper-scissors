@@ -1,4 +1,3 @@
-console.log("Hello World!");
 
 // function expression that computes a randomly chosen option of rock, paper or scissors
 let getCompChoice = function() {
@@ -51,45 +50,55 @@ function playRound(userChoice, compChoice) {
     return result;
 }
 
-function getPlayerChoice() {
-    let choice = prompt("Enter your choice (rock, paper, scissors): ")
-    
-    return choice;
-}
 
 
-// function that plays 5 rounds, records the score, then reports the winner/loser depending on score
-function game() {
+// function that plays rounds until 1 player reaches 5 points, attaches result of each round to p element in HTML
+function displayWinner(player, comp) {
+    //reference to p element
+    const para = document.querySelector('p');
     let playerScore = 0;
     let compScore = 0;
-    let ties = 0;
-    for (let i = 0; i < 5; i++) {
-        let result = playRound(getPlayerChoice(), getCompChoice());
-        if (result.includes('both')) {
-            ties++;
-        } else if (result.includes('lose')) {
+    let roundResult = playRound(player, comp);
+
+    if (roundResult.includes('both')) {
+        para.textContent = `${roundResult}: Player: ${playerScore}, Machine: ${compScore}`;
+    } else {
+        if (roundResult.includes('lose')) {
             compScore++;
+            para.textContent = `${roundResult}: Player: ${playerScore}, Machine: ${compScore}`
         } else {
             playerScore++;
+            para.textContent = `${roundResult}: Player: ${playerScore}, Machine: ${compScore}`;
         }
-        console.log(result);
     }
-
-    return displayWinner(playerScore, compScore, ties);
 }
 
-function displayWinner(playerScore, compScore, ties) {
-    let heading = ("Game results: ")
-    let winner;
-    if (playerScore > compScore) {
-        winner = `player wins! ${playerScore} to ${compScore}; there were ${ties} ties`;
-    } else {
-        winner = `computer wins, ${compScore} to ${playerScore}; there were ${ties} ties`;
+// get references to button container for event delegation
+const btnGroup = document.querySelector('.btn-container');
+
+btnGroup.addEventListener('click', (e) => {
+    let playerChoice = '';
+
+    let target = e.target;
+
+    switch(target.className) {
+        case 'choice-rock':
+            playerChoice = e.target.innerText;
+            console.log(playerChoice);
+            break;
+        case 'choice-paper':
+            playerChoice = e.target.innerText;
+            console.log(playerChoice);
+            break;
+        case 'choice-scissors':
+            playerChoice = e.target.innerText;
+            console.log(playerChoice);
+            break;
     }
-    let finalResult = heading + winner;
 
-    return finalResult;
-}
+    let compChoice = getCompChoice();
 
-console.log(game());
+    displayWinner(playerChoice, compChoice);
+
+});
 
