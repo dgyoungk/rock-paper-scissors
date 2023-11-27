@@ -11,7 +11,7 @@ const scorePara = document.querySelector('.score');
 let getCompChoice = function() {
     let choiceStr;
     let choiceNum = Math.floor(Math.random() * 3) + 1;
-    console.log(choiceNum);
+    // console.log(choiceNum);
 
     switch(choiceNum) {
         case 1:
@@ -58,34 +58,12 @@ function playRound(userChoice, compChoice) {
     return result;
 }
 
-// function that displays the game winner upon either side reaching 5 points
-function displayWinner() {
-    resultPara.textContent = '';
-    scorePara.textContent = '';
-    if (compScore === 5) {
-        resultPara.textContent = `Computer wins, ${compScore} to ${playerScore}`;
-        scorePara.textContent = '';
-        // disables buttons so that users can't select after the game is over
-        const btns = document.querySelectorAll('button');
-        for(const btn of btns) {
-            btn.disabled = true;
-        }
-    } else if (playerScore === 5) {
-        resultPara.textContent = `You win! ${playerScore} to ${compScore}`;
-        scorePara.textContent = '';
-        // disables buttons so that users can't select after the game is over
-        const btns = document.querySelectorAll('button');
-        for(const btn of btns) {
-            btn.disabled = true;
-        }
-    }
-}
 
 // function that displays the winner of each round
 function displayResult(player, comp) {
     let roundResult = playRound(player, comp);
 
-    if (roundResult.includes('both')) {
+    if (roundResult.includes('Tie')) {
         resultPara.textContent = `${roundResult}`;
         scorePara.textContent = `Player: ${playerScore}, Machine: ${compScore}`;
     } else {
@@ -107,6 +85,52 @@ function displayResult(player, comp) {
     }
 }
 
+// function that displays the game winner upon either side reaching 5 points
+function displayWinner() {
+    resultPara.textContent = '';
+    scorePara.textContent = '';
+    if (compScore === 5) {
+        resultPara.textContent = `Computer wins, ${compScore} to ${playerScore}`;
+        // disables buttons so that users can't select after the game is over
+        const btns = document.querySelectorAll('button');
+        for(const btn of btns) {
+            btn.disabled = true;
+        }
+    } else if (playerScore === 5) {
+        resultPara.textContent = `You win! ${playerScore} to ${compScore}`;
+        // disables buttons so that users can't select after the game is over
+        const btns = document.querySelectorAll('button');
+        for(const btn of btns) {
+            btn.disabled = true;
+        }
+    }
+
+    promptReplay();
+}
+
+let promptReplay = function() {
+    // reference to the container to attach to
+    const progress = document.querySelector('.progress-container');
+    // create button for replay
+    const replay = document.createElement('button');
+    progress.appendChild(replay);
+    replay.innerText = "Play again?"
+
+    // event handler that resets everything
+    replay.addEventListener('click', () => {
+        playerScore = 0;
+        compScore = 0;
+        resultPara.textContent = '';
+        scorePara.textContent = '';
+        const buttons = document.querySelectorAll('button');
+        for (const btn of buttons) {
+            btn.disabled = false;
+        }
+
+        progress.removeChild(replay);
+    });
+};
+
 // get references to button container for event delegation
 const btnGroup = document.querySelector('.btn-container');
 
@@ -119,15 +143,15 @@ btnGroup.addEventListener('click', (e) => {
     switch(target.className) {
         case 'choice-rock':
             playerChoice = e.target.innerText;
-            console.log(playerChoice);
+            //console.log(playerChoice);
             break;
         case 'choice-paper':
             playerChoice = e.target.innerText;
-            console.log(playerChoice);
+            //console.log(playerChoice);
             break;
         case 'choice-scissors':
             playerChoice = e.target.innerText;
-            console.log(playerChoice);
+            //console.log(playerChoice);
             break;
     }
 
